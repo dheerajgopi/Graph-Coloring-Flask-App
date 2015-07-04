@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Create a graph</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+</head>
+
+<canvas id="canvas" width="1260" height="480" style="border:3px solid"></canvas>
+<form>
+  <input id="node1" type="text">
+  <input id="node2" type="text">
+  <input id="edge" type="button" value="Make Edge" onclick="make_edge()">
+  <input id="color" type="button" value="Colour it!" onclick="send_adj_list()">
+
+</form>
+
+<script>
+var canvas = document.getElementById("canvas");
+var context = canvas.getContext("2d");
+context.lineWidth = 1;
+var node_num = 0;
+adjacency_list = [];
+node();
+
+function node() {
+  // To draw a node on the canvas where mouse is clicked
+  canvas.onmousedown = place_node;
+
+  function place_node() {
+    var img = context.getImageData(0, 0, canvas.width, canvas.height);
+    context.putImageData(img, 0, 0);
+    var x1 = event.x;
+    var y1 = event.y;
+    context.font = "bold 15px sans-serif";
+    context.fillText(node_num, x1-4, y1+3);
+    context.beginPath();
+    context.arc(x1, y1, 10, 0, Math.PI*2, true);
+    context.stroke();
+    context.closePath();
+    var adj = {};
+    adj.node = node_num;
+    adj.adj_nodes = [];
+    adj.cord = {x:x1, y:y1};
+    adjacency_list.push(adj);
+    node_num += 1;
+  }
+}
+
+function make_edge() {
+  // To draw an edge between the given two nodes
+
+  var node1 = document.getElementById("node1").value;
+  var node2 = document.getElementById("node2").value;
+
+  if (node1 == node2) {
+    alert("Self-loop not allowed!");
+  }
+  else {
+    var has_edge = adjacency_list[node2].adj_nodes.indexOf(node1);
+    if (has_edge !== -1){
+      alert("nodes already connected!");}
+    else {
+      var x1 = adjacency_list[node1].cord.x;
+      var y1 = adjacency_list[node1].cord.y;
+      var x2 = adjacency_list[node2].cord.x;
+      var y2 = adjacency_list[node2].cord.y;
+      var img = context.getImageData(0, 0, canvas.width, canvas.height);
+      context.putImageData(img, 0, 0);
+      context.beginPath();
+      context.moveTo(x1, y1);
+      context.lineTo(x2, y2);
+      context.stroke();
+      context.closePath();
+      adjacency_list[node1].adj_nodes.push(node2);
+      adjacency_list[node2].adj_nodes.push(node1);
+    }
+  }
+}
+
+function send_adj_list() {
+  $.post('/', 
+    {'adj_list': JSON.stringify(adjacency_list)}).done(
+      function success(datas) {
+        console.log(datas[colored_graph]);
+        vertices = datas[colored_graph];
+        color_graph();
+      }).fail(function error(){
+          alert("Network error!! Try again!");});
+}
+
+function color_graph() {
+  alert("hi");
+}
+
+</script>
+
+</html>
