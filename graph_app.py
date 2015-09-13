@@ -27,7 +27,7 @@ def color() :
                 else:
                     done=True
                     final[node['node']] = color_list[i]
-        return render_template('graph.html
+        return jsonify({1:adj_list})
 
 def find(node, adj_list):
     vlist=[]

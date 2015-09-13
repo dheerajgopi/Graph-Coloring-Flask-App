@@ -82,19 +82,19 @@ function send_adj_list() {
   $.post('/', 
     {'adj_list': JSON.stringify(adjacency_list)}).done(
       function success(datas) {
-        console.log(datas[1]);
-        vertices = datas[1];
+        console.log(datas[colored_graph]);
+        vertices = datas[colored_graph];
         color_graph();
       }).fail(function error(){
           alert("Network error!! Try again!");});
 }
 
 function color_graph() {
-  for(v in adj_list){
+  for(v in adjacency_list){
     var canvas=document.getElementById("canvas");
     var context=canvas.getContext("2d");
-    var x=adj_list[v].cord[0];
-    var y=adj_list[v].cord[1];
+    var x=adjacency_list[v].cord[0];
+    var y=adjacency_list[v].cord[1];
     context.fillStyle=vertex[v].color;
     context.beginPath();
     context.fillRect(x,y,10,10);
