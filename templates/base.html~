@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <script src="static/script.js"></script>
+    <script src="static/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="static/bootstrap.css">
+    <title>GRAPH COLOURING</title>
+<h1>GRAPH: <a href="/index">Home</a></h1>
+  </head>
+  <body>
+    <hr>
+    {% block content %}{% endblock %}
+  </body>
+</html>

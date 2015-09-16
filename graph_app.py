@@ -8,33 +8,36 @@ import json
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-@app.route('/', methods = ['GET', 'POST'])
-def color() :
-    if request.method == 'GET' :
-        return render_template('graph.html')
-    else :
-        final = {}
-        adj_list = json.loads(request.form['adj_list'])
-        color_list = ['red', 'orange', 'yellow', 'green', 'blue']
-        for node in adj_list:
-            ac=find(node['node'], adj_list)
-            i=0
-            done=False
-            while done == False and i < len(color_list):
-                if color_list[i] in ac:
-                    done=False
-                    i=i+1
-                else:
-                    done=True
-                    final[node['node']] = color_list[i]
-        return jsonify({1:adj_list})
-
-def find(node, adj_list):
-    vlist=[]
-    for elem in adj_list:
-        if node in elem['adj_nodes']:
-            vlist.append(elem['color'])
-    return vlist
+import json
+@app.route('/')
+@app.route('/index')
+def index():
+    return render_template("index.html",
+                           title='Home')
+@app.route('/colour',methods=['POST','GET'])
+def colour():
+	vertexes=request.form['vertex']
+	vertexes=json.loads(vertexes)
+	colours=["green","blue","red","yellow","white"]
+	cond=False
+	for vertex in vertexes:
+		ac=find(vertex['name'],vertexes)
+		i=0
+		cond=False
+		while cond==False and i<len(colours):
+			if colours[i] in ac:
+				cond=False
+				i=i+1
+			else:
+				cond=True
+				vertex['color']=colours[i]
+	return jsonify({1:vertexes})
+def find(name,vertexes):
+	vlist=[]
+	for vertex in vertexes:
+		if name in vertex['adjacent']:
+			vlist.append(vertex['color'])
+	return vlist
 
 if __name__ == '__main__' :
     app.run(debug = True)

@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<input type="text" id="x" style="width:50px; height:20px" onkeydown="enter(event)">
+<input type="text" id="y" style="width:50px; height:20px" onkeydown="enter(event)">
+<input type="button" value="connect" onclick="connect()">
+<input type="button" value="colour" onclick="send_server()">
+ 	<canvas id="graphcanvas" width="600" height="600" style="border:1px solid; color:blue; cursor:crosshair;" onclick="addvertex(event)"></canvas>
+{% endblock %}
